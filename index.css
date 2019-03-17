@@ -50,3 +50,12 @@
     border-radius: 5px;
     line-height: 100px;
 }
+
+/* #resetButton {
+    text-align: center;
+} */
+
+.resetButtonClass {
+    text-align: center;
+    margin-top: 20px;
+}
