@@ -19,7 +19,9 @@
 
 const grid = [];
 const GRID_LENGTH = 3;
-let turn = 'X';
+const player = 'X';
+const computer = 'O';
+// let turn = 'X';
 
 function initializeGrid() {
     for (let colIdx = 0;colIdx < GRID_LENGTH; colIdx++) {
@@ -70,6 +72,65 @@ function renderMainGrid() {
     parent.innerHTML = '<div class="columnsStyle">' + columnDivs + '</div>';
 }
 
+function checkForWinner() {
+    // check rows
+    for (let idx = 0; idx < grid.length; idx++) {
+        if (grid[idx][0] !== 0 && 
+            grid[idx][0] === grid[idx][1] && 
+            grid[idx][1] === grid[idx][2]) {
+            return grid[idx][0];
+        }
+    }
+
+    // check columns
+    for (let idx = 0; idx < grid.length; idx++) {
+        if (grid[0][idx] !== 0 && 
+            grid[0][idx] === grid[1][idx] && 
+            grid[1][idx] === grid[2][idx]) {
+            return grid[0][idx];
+        }
+    }
+
+    // check diagonals
+    // top right to bottom left
+    if (grid[0][0] !== 0 && 
+        grid[0][0] === grid[1][1] && 
+        grid[1][1] === grid[2][2]) {
+        return grid[0][0];
+    }
+
+    // top left to bottom right
+    if (grid[0][2] !== 0 && 
+        grid[0][2] === grid[1][1] && 
+        grid[1][1] === grid[2][0]) {
+        return grid[0][2];
+    }
+
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid.length; j++) {
+            if (grid[i][j] === 0) {
+                return false;
+            } 
+        }
+    }
+    return null;
+}
+
+function computersTurn() {
+    // returns the first empty spot
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid.length; j++) {
+            if (grid[i][j] === 0) {
+                return {
+                    i: i,
+                    j: j
+                };
+            } 
+        }
+    }
+    return null;
+}
+
 function onBoxClick() {
     var rowIdx = this.getAttribute("rowIdx");
     var colIdx = this.getAttribute("colIdx");
@@ -77,6 +138,22 @@ function onBoxClick() {
     grid[colIdx][rowIdx] = newValue;
     renderMainGrid();
     addClickHandlers();
+
+    let winner = checkForWinner();
+    if (winner) {
+        alert('game over: ' + winner);
+    } else {
+        const compTurn = computersTurn();
+        grid[compTurn.i][compTurn.j] = 2;
+        renderMainGrid();
+        addClickHandlers();
+
+        winner = checkForWinner();
+        if (winner) {
+            alert('game over: ' + winner);
+        }
+    }
+    
 }
 
 function addClickHandlers() {
