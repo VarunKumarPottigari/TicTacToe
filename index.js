@@ -336,7 +336,6 @@ function addResetListener() {
 }
 
 function resetGrid() {
-    debugger;
     initializeGrid();
     renderMainGrid();
     addClickHandlers();
